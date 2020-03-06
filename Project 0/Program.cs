@@ -18,7 +18,17 @@ namespace Project_0
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            GetInput();
+            SendOrder();
+            AddCustomer();
+            AddCusLocation();
+            CustomerSearch();
+            OrderDetails();
+            StoreHistory();
+            CustomerHistory();
+            HistorySort();
+            OrderSuggestion();
+            HistoryStats();
         }
     }
 }
