@@ -2,7 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace DataAccess.DataAccess
+namespace DataAccess.Entities
+
 {
     public partial class BurgerDbContext : DbContext
     {
@@ -25,7 +26,7 @@ namespace DataAccess.DataAccess
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(SecretConfiguration.connecctionString);
+                optionsBuilder.UseSqlServer(SecretConfiguration.connectionString);
             }
         }
 

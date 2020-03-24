@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ClassLibrary1
+namespace Library.Models
 {
     public class Reviews
     {

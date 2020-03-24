@@ -1,24 +1,22 @@
 ﻿using System;
 
-namespace ClassLibrary1
+namespace Library.Models
 {
    public class Customer
     {
         //Fields
 
-        string name;
-
-        //string firstName;
-        //string lastName;
+        private string firstName;
+        private string lastName;
         //public Customer(string f, string l)
         //{
         //    firstName = f;
         //    lastName = l;
         //}
 
-        public string Name
+        public string FirstName
         {
-            get => name;
+            get => firstName;
             set
             {
                 if (value.Length == 0)
@@ -26,10 +24,24 @@ namespace ClassLibrary1
                     throw new ArgumentException("Name must not be empty.", nameof(value));
                 }
 
-                name = value;
+                firstName = value;
             }
         }
 
+
+        public string LastName
+        {
+            get => lastName;
+            set
+            {
+                if (value.Length == 0)
+                {
+                    throw new ArgumentException("Name must not be empty.", nameof(value));
+                }
+
+                lastName = value;
+            }
+        }
 
         string address;
         public string Address
@@ -46,13 +58,13 @@ namespace ClassLibrary1
             }
         }
 
-        int phone;
-        public int Phone
+        string phone;
+        public string Phone
         {
             get => phone;
             set
             {
-                if (value==0)
+                if (value.Length == 0)
                 {
                     throw new ArgumentException("Number must not be empty.", nameof(value));
                 }

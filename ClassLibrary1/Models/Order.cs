@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using DataAccess.Entities;
 
-namespace ClassLibrary1
+namespace Library.Models
 {
     public class Order 
     {
-        //Fields
-        string store;
-        public string Store => $"{store}";
+        //Fields & properties
+        public string Store { get; set; }
 
         string customer;
-        public string Customer => $"{customer}";
+        public string Customer { get; set; }
 
-        int orderHr;
-        int orderMn;
-        public string OrderTime => $"{orderHr}:{orderMn}";
+        public string OrderTime { get; set; }
 
         // if order burger plain, comes with bun alone.
         // for items besides burger and bun: 0 is none, 
@@ -34,8 +32,25 @@ namespace ClassLibrary1
 
         int soda = 0;
 
-
         //Methods
+
+        public static void PlaceOrder(OrderHistory order, Customers cust)
+        {
+            order.CustomerName = cust.FirstName + " " + cust.LastName;
+            order.CustomerId = cust.Id;
+            Console.Write("Enter store location: ");
+            order.Location = Console.ReadLine();
+            order.DateTime = DateTime.Now;
+            Console.Write("Enter phone number: ");
+
+            using (var db = new BurgerDbContext())
+            {
+                db.OrderHistory.Add(order);
+                db.SaveChanges();
+            }
+            Console.Write("Your order has been placed.");
+        }
+
         public void AddBurger()
         {
             burgers++;

@@ -9,7 +9,6 @@ namespace ClassLibrary1
 
         void GetInput();
         void SendOrder();
-        void AddCusLocation();
         void CustomerSearch();
         void OrderDetails();
         void StoreHistory();
