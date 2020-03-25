@@ -9,16 +9,6 @@ namespace ConsoleApp1
 {
     class Program
     {
-        // place orders to store locations for customers
-        // add a new customer
-        // search customers by name
-        // display details of an order
-        // display all order history of a store location
-        // display all order history of a customer
-        // input validation
-        // (optional: order history can be sorted by earliest, latest, cheapest, most expensive)
-        // (optional: get a suggested order for a customer based on his order history)
-        // (optional: display some statistics based on order history)
 
         static void Main(string[] args)
         {
@@ -42,21 +32,12 @@ namespace ConsoleApp1
 
                 if (input == "l")
                 {
-                    using (var db = new BurgerDbContext())
-                    {
-                        Console.Write("Enter fisrt name: ");
-                        var firstName = Console.ReadLine();
-                        Console.Write("Enter last name: ");
-                        var lastName = Console.ReadLine();
-                        customer = (from c in db.Customers
-                                    where c.LastName == lastName && c.FirstName == firstName
-                                    select c).SingleOrDefault();
-                    }
+                    customer = Login(customer);
                 }
 
                 else if (input == "c")
                 {
-                        Customers.AddCustomer(customer);
+                        customer = Customer.AddCustomer(customer);
                 }
 
                 else if (input == "m")
@@ -144,16 +125,6 @@ namespace ConsoleApp1
 
                 }
 
-               
-
-                //if (input == "p")
-                //{
-                    //order.Store = Console.ReadLine();
-                    //order.Customer = Console.ReadLine();
-                   // order.OrderTime = DateTime.Now.ToString();
-
-                //}
-
                 else if (input == "q")
                 {
                     Console.WriteLine("Goodbye.");
@@ -168,6 +139,23 @@ namespace ConsoleApp1
 
            
             }
+        }
+
+        public static Customers Login(Customers cust)
+        {
+            using (var db = new BurgerDbContext())
+            {
+                Console.Write("Enter fisrt name: ");
+                var firstName = Console.ReadLine();
+                Console.Write("Enter last name: ");
+                var lastName = Console.ReadLine();
+                cust = (from c in db.Customers
+                        where c.LastName == lastName && c.FirstName == firstName
+                        select c).SingleOrDefault();
+            }
+
+            Console.WriteLine("    {0} {1}, {2}, {3}", cust.FirstName, cust.LastName, cust.PhoneNumber, cust.Address);
+            return cust;
         }
     }
 }

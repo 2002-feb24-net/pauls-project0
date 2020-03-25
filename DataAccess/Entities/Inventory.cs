@@ -5,10 +5,23 @@ namespace DataAccess.Entities
 {
     public partial class Inventory
     {
-        public int Id { get; set; }
-        public string Product { get; set; }
-        public int LeominsterQuantity { get; set; }
-        public int GardnerQuantity { get; set; }
-        public int WorcesterQuantity { get; set; }
+        public int StoreId { get; set; }
+        public string Location { get; set; }
+        public int Hamburgers { get; set; }
+        public int Buns { get; set; }
+        public int Cheese { get; set; }
+        public int Bacon { get; set; }
+        public int Lettuce { get; set; }
+        public int Tomatoes { get; set; }
+        public int Onions { get; set; }
+        public int Pickles { get; set; }
+        public int Mayonaise { get; set; }
+        public int Ketchup { get; set; }
+        public int Mustard { get; set; }
+        public int EdSauce { get; set; }
+        public int Fries { get; set; }
+        public int Cola { get; set; }
+
+        public virtual Stores Store { get; set; }
     }
 }

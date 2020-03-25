@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DataAccess.Entities
-
 {
     public partial class BurgerDbContext : DbContext
     {
@@ -36,8 +35,6 @@ namespace DataAccess.Entities
             {
                 entity.Property(e => e.Address).HasMaxLength(50);
 
-                entity.Property(e => e.FavoriteItem).HasMaxLength(50);
-
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasMaxLength(20);
@@ -51,18 +48,22 @@ namespace DataAccess.Entities
                     .HasMaxLength(10)
                     .IsUnicode(false)
                     .IsFixedLength();
-
-                entity.HasOne(d => d.FavoriteStore)
-                    .WithMany(p => p.Customers)
-                    .HasForeignKey(d => d.FavoriteStoreId)
-                    .HasConstraintName("FK__Customers__Favor__4BAC3F29");
             });
 
             modelBuilder.Entity<Inventory>(entity =>
             {
-                entity.Property(e => e.Product)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.HasKey(e => e.StoreId)
+                    .HasName("PK__Inventor__3B82F101CA8753F1");
+
+                entity.Property(e => e.StoreId).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Location).HasMaxLength(50);
+
+                entity.HasOne(d => d.Store)
+                    .WithOne(p => p.Inventory)
+                    .HasForeignKey<Inventory>(d => d.StoreId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Inventory__Store__0C85DE4D");
             });
 
             modelBuilder.Entity<OrderHistory>(entity =>

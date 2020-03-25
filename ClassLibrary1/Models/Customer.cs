@@ -1,4 +1,5 @@
 ﻿using System;
+using DataAccess.Entities;
 
 namespace Library.Models
 {
@@ -6,81 +7,35 @@ namespace Library.Models
     {
         //Fields
 
-        private string firstName;
-        private string lastName;
-        //public Customer(string f, string l)
-        //{
-        //    firstName = f;
-        //    lastName = l;
-        //}
+        public string FirstName { get; set; }
 
-        public string FirstName
-        {
-            get => firstName;
-            set
-            {
-                if (value.Length == 0)
-                {
-                    throw new ArgumentException("Name must not be empty.", nameof(value));
-                }
+        public string LastName { get; set; }
 
-                firstName = value;
-            }
-        }
+        public string Address { get; set; }
 
+        public string Phone { get; set; }
 
-        public string LastName
-        {
-            get => lastName;
-            set
-            {
-                if (value.Length == 0)
-                {
-                    throw new ArgumentException("Name must not be empty.", nameof(value));
-                }
-
-                lastName = value;
-            }
-        }
-
-        string address;
-        public string Address
-        {
-            get => address;
-            set
-            {
-                if (value.Length == 0)
-                {
-                    throw new ArgumentException("Address must not be empty.", nameof(value));
-                }
-
-                address = value;
-            }
-        }
-
-        string phone;
-        public string Phone
-        {
-            get => phone;
-            set
-            {
-                if (value.Length == 0)
-                {
-                    throw new ArgumentException("Number must not be empty.", nameof(value));
-                }
-                phone = value;
-            }
-
-        }
-
-        string favItem;
 
         //Methods
 
-        void FavItem(string n)
+        public static Customers AddCustomer(Customers cust)
         {
+            Console.Write("Enter first name: ");
+            cust.FirstName = Console.ReadLine();
+            Console.Write("Enter last name: ");
+            cust.LastName = Console.ReadLine();
+            Console.WriteLine("Enter your address: ");
+            cust.Address = Console.ReadLine();
+            Console.Write("Enter phone number: ");
+            cust.PhoneNumber = Console.ReadLine();
 
+            using (var db = new BurgerDbContext())
+            {
+                db.Customers.Add(cust);
+                db.SaveChanges();
+            }
+            Console.Write("Your order has been placed. Thank you");
+            return cust;
         }
-
     }
 }

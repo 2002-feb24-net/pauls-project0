@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using DataAccess.Entities;
+using System.Linq;
 
 namespace Library.Models
 {
-    public class Order 
+    public class Order //: IOrder
     {
         //Fields & properties
         public string Store { get; set; }
@@ -33,27 +34,43 @@ namespace Library.Models
         int soda = 0;
 
         //Methods
-
+        
         public static void PlaceOrder(OrderHistory order, Customers cust)
         {
             order.CustomerName = cust.FirstName + " " + cust.LastName;
             order.CustomerId = cust.Id;
-            Console.Write("Enter store location: ");
-            order.Location = Console.ReadLine();
+            //Console.Write("Enter store location: ");
+            //order.Location = Console.ReadLine();
             order.DateTime = DateTime.Now;
-            Console.Write("Enter phone number: ");
+            Console.Write("would you like a hamburger? ");
+            var input = Console.ReadLine();
+            if (input == "y")
+            {
+                order = AddBurger(order);
+            }
 
             using (var db = new BurgerDbContext())
             {
                 db.OrderHistory.Add(order);
                 db.SaveChanges();
             }
-            Console.Write("Your order has been placed.");
+            Console.Write("Your order has been placed. Thank you");
         }
 
-        public void AddBurger()
+        public static OrderHistory AddBurger(OrderHistory order)
         {
-            burgers++;
+            order.Order = order.Order + "1 Hamburger + ";
+            using (var db = new BurgerDbContext())
+            {
+                var product = (from p in db.Inventory
+                               where p.Location == order.Location
+                                 select p).SingleOrDefault();
+
+                product.Hamburgers = product.Hamburgers - 1;
+                db.SaveChanges();
+            }
+            Console.WriteLine("Hamburger added");
+            return order;
         }
 
         public void AddLettuce(char x)
