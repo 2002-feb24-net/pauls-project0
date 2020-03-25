@@ -34,7 +34,7 @@ namespace Library.Models
                 db.Customers.Add(cust);
                 db.SaveChanges();
             }
-            Console.Write("Your order has been placed. Thank you");
+            Console.Write("Your Information has been saved.");
             return cust;
         }
     }

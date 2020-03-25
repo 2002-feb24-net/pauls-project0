@@ -11,7 +11,7 @@ namespace DataAccess.Entities
             ReviewsNavigation = new HashSet<Reviews>();
         }
 
-        public int Id { get; set; }
+        public int StoreId { get; set; }
         public string Location { get; set; }
         public decimal? AvgReviewScore { get; set; }
         public int? Reviews { get; set; }
