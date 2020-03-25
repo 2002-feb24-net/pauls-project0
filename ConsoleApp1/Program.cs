@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Entities;
 using Library.Models;
@@ -33,6 +34,10 @@ namespace ConsoleApp1
                 if (input == "l")
                 {
                     customer = Login(customer, order);
+                    if (customer == null)
+                    {
+                        continue;
+                    }
                     order = InitializeOrder(order, customer);
 
                     Console.WriteLine("d: Display menu.");
@@ -81,13 +86,13 @@ namespace ConsoleApp1
                                 var ordersQuery =
                                     from entry in db.OrderHistory
                                     .AsEnumerable()
-                                    where order.Location == input
-                                    group order by order.StoreId;
+                                    where entry.Location == input
+                                    group entry by entry.StoreId;
 
-                                foreach (var entry in ordersQuery)
+                                foreach (var entries in ordersQuery)
                                 {
-                                    Console.WriteLine(entry.Key);
-                                    foreach (OrderHistory orders in entry)
+                                    Console.WriteLine(entries.Key);
+                                    foreach (OrderHistory orders in entries)
                                     {
                                         Console.WriteLine("    {0}: {1}, {2}, {3}", orders.Location, orders.CustomerName, orders.DateTime, orders.Order);
                                     }
@@ -104,13 +109,13 @@ namespace ConsoleApp1
                                 var ordersQuery =
                                     from entry in db.OrderHistory
                                     .AsEnumerable()
-                                    where order.CustomerName == input
-                                    group order by order.CustomerName;
+                                    where entry.CustomerName == input
+                                    group entry by entry.CustomerName;
 
-                                foreach (var entry in ordersQuery)
+                                foreach (var entries in ordersQuery)
                                 {
-                                    Console.WriteLine(entry.Key);
-                                    foreach (OrderHistory orders in entry)
+                                    Console.WriteLine(entries.Key);
+                                    foreach (OrderHistory orders in entries)
                                     {
                                         Console.WriteLine("    {0}: {1}, {2}, {3}", orders.Location, orders.CustomerName, orders.DateTime, orders.Order);
                                     }
@@ -139,7 +144,7 @@ namespace ConsoleApp1
                 else if (input == "q")
                 {
                     loop = false;
-                    return;
+                    break;
                 }
 
                 else
@@ -154,15 +159,21 @@ namespace ConsoleApp1
 
         public static Customers Login(Customers cust, OrderHistory order)
         {
+            Console.WriteLine();
+            Console.Write("Enter first name (or press b to go back): ");
+            var firstName = Console.ReadLine();
+            if(firstName == "b")
+            {
+                return cust;
+            }
+            Console.Write("Enter last name: ");
+            var lastName = Console.ReadLine();
+
             using (var db = new BurgerDbContext())
             {
-                Console.Write("Enter fisrt name: ");
-                var firstName = Console.ReadLine();
-                Console.Write("Enter last name: ");
-                var lastName = Console.ReadLine();
-                cust = (from c in db.Customers
-                        where c.LastName == lastName && c.FirstName == firstName
-                        select c).SingleOrDefault();
+                    cust = (from c in db.Customers
+                            where c.LastName == lastName && c.FirstName == firstName
+                            select c).SingleOrDefault();
             }
 
             Console.WriteLine("    {0} {1}, {2}, {3}", cust.FirstName, cust.LastName, cust.PhoneNumber, cust.Address);
@@ -170,11 +181,17 @@ namespace ConsoleApp1
             var input = Console.ReadLine();
             if (input == "n")
             {
-
+                Login(cust, order);
             }
             else if (input == "y")
             {
-             
+                return cust;
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("Invalid entry. Please try again.");
+                Login(cust, order);
             }
             return cust;
         }
@@ -183,6 +200,7 @@ namespace ConsoleApp1
         {
             order.CustomerName = cust.FirstName + " " + cust.LastName;
             order.CustomerId = cust.Id;
+            order.TotalPrice = 0;
             Console.Write("Enter store location you would like to order from: ");
             order.Location = Console.ReadLine();
             using (var db = new BurgerDbContext())

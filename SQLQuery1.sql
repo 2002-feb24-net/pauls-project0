@@ -62,13 +62,18 @@ INSERT INTO Inventory (Product, LeominsterQuantity, GardnerQuantity, WorcesterQu
 ;
 
 INSERT INTO Customers (FirstName, LastName, Address, PhoneNumber ) VALUES
-('Terrence', 'Ewing', '1000 Concord ln, Marlboro, MA, 01520', 5085557390);
+('Heidi', 'Ewing', '1000 Concord ln, Marlboro, MA, 01520', 5085552290),
+('Daniel', 'Mendoza', '58 Kilbourne dr, S. Lancaster, MA, 01561', 5085557390)
+;
 
 ALTER TABLE Stores ADD 
 PhoneNumber CHAR(10) NULL
 ;
-UPDATE customers SET favoriteitem =  'Double Bacon Cheeseburger w/ketchup, mayo, edsauce '
-WHERE Id = 1;
+UPDATE customers SET PhoneNumber =  5085555364
+WHERE Id = 4;
+
+UPDATE OrderHistory SET StoreId =  2
+WHERE Location = 'Gardner';
 
 INSERT INTO reviews (StoreID, CustomerId, Score, text) VALUES
 (1, 1, 8.5, 'My favorite location. Best Eds Sauce'),
@@ -76,8 +81,9 @@ INSERT INTO reviews (StoreID, CustomerId, Score, text) VALUES
 (3, 1, 1, 'Bad. Burger was cold, fries were stale, and the cola tasted like seltzer. Get it together, guys!')
 ;
 
-Insert into orderhistory (customername, customerid, "location", storeid, "order", "datetime" ) values
-((select firstname + ' ' + lastname from customers), 1, 'Gardner', 1, 'Double Bacon Cheeseburger w/ketchup, mayo, edsauce',	current_timestamp);
+Insert into orderhistory ( CustomerName, customerid, "location", storeid, "order", "datetime" ) values
+((select firstname + ' ' + lastname from customers where Id = 3), 3, 'Leominster', 2, 'Good Cheeseburger Deluxe', current_timestamp),
+((select firstname + ' ' + lastname from customers where Id = 4), 4, 'Worcester', 3, 'Double Cheeseburger Deluxe Meal', current_timestamp);
 
 ALTER TABLE Stores ADD 
 AvgReviewScore decimal(3,1) NULL
@@ -89,7 +95,37 @@ UPDATE stores SET avgreviewscore = (select AVG(score) from reviews where storeid
 where id = 3
 
 select * from customers
-select * from stores
 select * from inventory
 select * from reviews
 select * from orderhistory
+select * from stores
+
+DELETE FROM CUSTOMERS 
+WHERE ID = 2
+
+CREATE TABLE Inventory (
+	StoreId INT NOT NULL PRIMARY KEY IDENTITY FOREIGN KEY REFERENCES Stores(Id),
+	Location NVARCHAR(50),
+	Hamburgers Int NOT NUll,
+	Buns INT NOT NULL,
+	Cheese INT NOT NULL,
+	Bacon INT NOT NULL,
+	Lettuce INT NOT NULL,
+	Tomatoes INT NOT NULL,
+	Onions INT NOT NULL,
+	Pickles INT NOT NULL,
+	Mayonaise INT NOT NULL,
+	Ketchup INT NOT NULL,
+	Mustard INT NOT NULL,
+	EdSauce INT NOT NULL,
+	Fries INT NOT NULL,
+	Cola INT NOT NULL,
+);
+
+INSERT INTO Inventory (Location, Hamburgers, buns, cheese, bacon, lettuce, tomatoes, 
+onions, pickles, mayonaise, ketchup, mustard, edsauce, fries, cola) VALUES
+('Prices', 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1),
+('Leominster', 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100)
+
+UPDATE Inventory SET Hamburgers = 100
+where storeid = 2

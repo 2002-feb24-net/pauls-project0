@@ -12,6 +12,7 @@ namespace DataAccess.Entities
         public int StoreId { get; set; }
         public DateTime DateTime { get; set; }
         public string Order { get; set; }
+        public decimal? TotalPrice { get; set; }
 
         public virtual Customers Customer { get; set; }
         public virtual Stores Store { get; set; }

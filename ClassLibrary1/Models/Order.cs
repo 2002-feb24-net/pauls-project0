@@ -6,18 +6,18 @@ using System.Linq;
 
 namespace Library.Models
 {
-    public class Order //: IOrder
+    public class Order 
     {
         //Methods
-
+        
         public static string DisplayMenu()
         {
             Console.WriteLine();
             Console.WriteLine("1: Add one Good Burger with nothing on it: $2.00");
             Console.WriteLine("2: Add one Good Burger: $4.00");
-            Console.WriteLine("3: Add Cheese: $.50");
+            Console.WriteLine("3: Add Cheese: $1.00");
             Console.WriteLine("4: Add Bacon: $1.00");
-            Console.WriteLine("5: Add our famous Ed's Sauce: $.50");
+            Console.WriteLine("5: Add our famous Ed's Sauce: $1.00");
             Console.WriteLine("6: Add Fries: $1.00 ");
             Console.WriteLine("7: Add a Cola: $1.00 ");
             Console.WriteLine("8: Select some free optional condiments to add");
@@ -57,7 +57,6 @@ namespace Library.Models
                 input = DisplayMenu();
                 if (input == "b")
                 {
-                    //input = "";
                     return input;
                 }
                 else if (input == "1")
@@ -144,9 +143,10 @@ namespace Library.Models
 
             do
             {
-                Console.WriteLine(order.Order);
+                Console.WriteLine(order.Order + " = $" + order.TotalPrice);
                 Console.WriteLine();
                 Console.Write("Are you finished with your order? (y/n)");
+                Console.WriteLine();
                 input = Console.ReadLine();
                 if (input == "n")
                 {
@@ -161,6 +161,7 @@ namespace Library.Models
                         db.SaveChanges();
                     }
                     Console.Write("Your order has been placed. Thank you");
+                    Console.WriteLine();
                     input = "q";
                     return input;
                 }
@@ -184,6 +185,11 @@ namespace Library.Models
 
                 product.Buns -= 1;
 
+                var price = (from p in db.Prices
+                               where p.Product == "Buns"
+                               select p).SingleOrDefault();
+
+                order.TotalPrice += price.Price;
                 db.SaveChanges();
             }
             Console.WriteLine("'1 Good Burger with nothing on it' ordered.");
@@ -202,10 +208,24 @@ namespace Library.Models
                 product.Hamburgers -= 1;
                 product.Buns -= 1;
 
+                var price = (from p in db.Prices
+                             where p.Product == "Buns"
+                             select p).SingleOrDefault();
+
+                order.TotalPrice += price.Price;
+
+                price = (from p in db.Prices
+                             where p.Product == "Hamburgers"
+                             select p).SingleOrDefault();
+
+                order.TotalPrice += price.Price;
+
                 db.SaveChanges();
+
+                Console.WriteLine("Good Burger added");
+                return order;
             }
-            Console.WriteLine("Good Burger added");
-            return order;
+           
         }
 
         public static OrderHistory AddCheese(OrderHistory order)
@@ -218,6 +238,12 @@ namespace Library.Models
                                select p).SingleOrDefault();
 
                 product.Cheese -= 1;
+
+                var price = (from p in db.Prices
+                             where p.Product == "Cheese"
+                             select p).SingleOrDefault();
+
+                order.TotalPrice += price.Price;
 
                 db.SaveChanges();
             }
@@ -236,6 +262,12 @@ namespace Library.Models
 
                 product.Bacon -= 1;
 
+                var price = (from p in db.Prices
+                             where p.Product == "Bacon"
+                             select p).SingleOrDefault();
+
+                order.TotalPrice += price.Price;
+
                 db.SaveChanges();
             }
             Console.WriteLine("bacon added");
@@ -253,6 +285,12 @@ namespace Library.Models
 
                 product.EdSauce -= 1;
 
+                var price = (from p in db.Prices
+                             where p.Product == "EdSauce"
+                             select p).SingleOrDefault();
+
+                order.TotalPrice += price.Price;
+
                 db.SaveChanges();
             }
             Console.WriteLine("Ed's Sauce added");
@@ -269,6 +307,11 @@ namespace Library.Models
 
                 product.Fries -= 1;
 
+                var price = (from p in db.Prices
+                             where p.Product == "Fries"
+                             select p).SingleOrDefault();
+
+                order.TotalPrice += price.Price;
                 db.SaveChanges();
             }
             Console.WriteLine("fries added");
@@ -285,6 +328,12 @@ namespace Library.Models
                                select p).SingleOrDefault();
 
                 product.Cola -= 1;
+
+                var price = (from p in db.Prices
+                             where p.Product == "Cola"
+                             select p).SingleOrDefault();
+
+                order.TotalPrice += price.Price;
 
                 db.SaveChanges();
             }

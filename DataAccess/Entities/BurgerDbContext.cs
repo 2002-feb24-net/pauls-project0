@@ -18,6 +18,7 @@ namespace DataAccess.Entities
         public virtual DbSet<Customers> Customers { get; set; }
         public virtual DbSet<Inventory> Inventory { get; set; }
         public virtual DbSet<OrderHistory> OrderHistory { get; set; }
+        public virtual DbSet<Prices> Prices { get; set; }
         public virtual DbSet<Reviews> Reviews { get; set; }
         public virtual DbSet<Stores> Stores { get; set; }
 
@@ -25,8 +26,7 @@ namespace DataAccess.Entities
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=tcp:rev-stewart.database.windows.net,1433;Initial Catalog=BurgerDb;Persist Security Info=False;User ID=Pstewart;Password=Sherlocked221;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                optionsBuilder.UseSqlServer(SecretConfiguration.connectionString);
             }
         }
 
@@ -86,6 +86,8 @@ namespace DataAccess.Entities
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.Property(e => e.TotalPrice).HasColumnType("money");
+
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.OrderHistory)
                     .HasForeignKey(d => d.CustomerId)
@@ -97,6 +99,19 @@ namespace DataAccess.Entities
                     .HasForeignKey(d => d.StoreId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__OrderHist__Store__60A75C0F");
+            });
+
+            modelBuilder.Entity<Prices>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.Price)
+                    .HasColumnName("Price")
+                    .HasColumnType("money");
+
+                entity.Property(e => e.Product)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Reviews>(entity =>
