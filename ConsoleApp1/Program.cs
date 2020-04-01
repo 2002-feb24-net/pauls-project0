@@ -36,7 +36,7 @@ namespace ConsoleApp1
                     customer = Login(customer, order);
                     if (customer == null)
                     {
-                        continue;
+                        break;
                     }
                     order = InitializeOrder(order, customer);
 
