@@ -26,7 +26,8 @@ namespace DataAccess.Entities
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(SecretConfiguration.connectionString);
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Server=tcp:rev-stewart.database.windows.net,1433;Initial Catalog=BurgerDb;Persist Security Info=False;User ID=Pstewart;Password=Sherlocked221;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
@@ -53,18 +54,11 @@ namespace DataAccess.Entities
 
             modelBuilder.Entity<Inventory>(entity =>
             {
-                entity.HasKey(e => e.StoreId)
-                    .HasName("PK__Inventor__3B82F101CA8753F1");
+                entity.Property(e => e.Price).HasColumnType("money");
 
-                entity.Property(e => e.StoreId).ValueGeneratedOnAdd();
-
-                entity.Property(e => e.Location).HasMaxLength(50);
-
-                entity.HasOne(d => d.Store)
-                    .WithOne(p => p.Inventory)
-                    .HasForeignKey<Inventory>(d => d.StoreId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventory__Store__0C85DE4D");
+                entity.Property(e => e.Product)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<OrderHistory>(entity =>
@@ -105,9 +99,7 @@ namespace DataAccess.Entities
             {
                 entity.HasNoKey();
 
-                entity.Property(e => e.Price)
-                    .HasColumnName("Price")
-                    .HasColumnType("money");
+                entity.Property(e => e.Price).HasColumnType("money");
 
                 entity.Property(e => e.Product)
                     .IsRequired()

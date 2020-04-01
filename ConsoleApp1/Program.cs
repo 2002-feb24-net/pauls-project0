@@ -22,6 +22,7 @@ namespace ConsoleApp1
             bool loop = true;
             while (loop)
             {
+                 
                 Console.WriteLine();
                 Console.WriteLine("l:\tlogin as existing customer");
                 Console.WriteLine("c:\tIf you're a new customer.");
@@ -33,7 +34,7 @@ namespace ConsoleApp1
 
                 if (input == "l")
                 {
-                    customer = Login(customer, order);
+                    customer = Login(order);
                     if (customer == null)
                     {
                         continue;
@@ -157,8 +158,9 @@ namespace ConsoleApp1
             Console.WriteLine("Goodbye.");
         }
 
-        public static Customers Login(Customers cust, OrderHistory order)
+        public static Customers Login(OrderHistory order)
         {
+            var cust = new Customers();
             Console.WriteLine();
             Console.Write("Enter first name (or press b to go back): ");
             var firstName = Console.ReadLine();
@@ -171,17 +173,28 @@ namespace ConsoleApp1
 
             using (var db = new BurgerDbContext())
             {
-                    cust = (from c in db.Customers
-                            where c.LastName == lastName && c.FirstName == firstName
-                            select c).SingleOrDefault();
+                var cus = from c in db.Customers
+                             where c.LastName.Equals(lastName)
+                                && c.FirstName.Equals(firstName)
+                             select c;
+                
+                 cust = cus.FirstOrDefault();
+                if (cust == null)
+                {
+                    Console.WriteLine("No Customers found. Please try again");
+                    Login(order);
+                }
+                else
+                {
+                        Console.WriteLine("    {0} {1}, {2}, {3}", cust.FirstName, cust.LastName, cust.PhoneNumber, cust.Address);
+                }
             }
-
-            Console.WriteLine("    {0} {1}, {2}, {3}", cust.FirstName, cust.LastName, cust.PhoneNumber, cust.Address);
+   
             Console.WriteLine("Is your informaion correct? (y/n)");
             var input = Console.ReadLine();
             if (input == "n")
             {
-                Login(cust, order);
+                Login(order);
             }
             else if (input == "y")
             {
@@ -191,7 +204,7 @@ namespace ConsoleApp1
             {
                 Console.WriteLine();
                 Console.WriteLine("Invalid entry. Please try again.");
-                Login(cust, order);
+                Login(order);
             }
             return cust;
         }
@@ -201,15 +214,31 @@ namespace ConsoleApp1
             order.CustomerName = cust.FirstName + " " + cust.LastName;
             order.CustomerId = cust.Id;
             order.TotalPrice = 0;
-            Console.Write("Enter store location you would like to order from: ");
-            order.Location = Console.ReadLine();
-            using (var db = new BurgerDbContext())
+            Console.WriteLine("Enter store location you would like to order from: ");
+            Console.WriteLine("1: Leominster");
+            Console.WriteLine("2: Gardner");
+            Console.WriteLine("3: Worcester");
+            string input = Console.ReadLine();
+            Console.WriteLine();
+            if (input == "1" || input == "2" || input == "3")
             {
-                var store = (from s in db.Stores
-                             where s.Location == order.Location
-                             select s).SingleOrDefault();
+                int storeId = int.Parse(input);
+;                using (var db = new BurgerDbContext())
+                {
+                    var store = (from s in db.Stores
+                                 where s.StoreId == storeId
+                                 select s).SingleOrDefault();
 
-                order.StoreId = store.StoreId;
+
+                    order.StoreId = store.StoreId;
+                    return order;
+                }
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("Invalid entry. Please try again.");
+                InitializeOrder(order, cust);
                 return order;
             }
         }

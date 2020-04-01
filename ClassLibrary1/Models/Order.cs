@@ -198,7 +198,7 @@ namespace Library.Models
 
         public static OrderHistory GoodBurger(OrderHistory order)
         {
-            order.Order = order.Order + "1 Good Burger ";
+            order.Order += "1 Good Burger ";
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
@@ -230,7 +230,7 @@ namespace Library.Models
 
         public static OrderHistory AddCheese(OrderHistory order)
         {
-            order.Order = order.Order + "+ cheese ";
+            order.Order += "+ cheese ";
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
@@ -253,7 +253,7 @@ namespace Library.Models
 
         public static OrderHistory AddBacon(OrderHistory order)
         {
-            order.Order = order.Order + "+ bacon ";
+            order.Order += "+ bacon ";
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
@@ -276,7 +276,7 @@ namespace Library.Models
 
         public static OrderHistory AddEdSauce(OrderHistory order)
         {
-            order.Order = order.Order + "+ Ed's Sauce ";
+            order.Order += "+ Ed's Sauce ";
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
@@ -298,7 +298,7 @@ namespace Library.Models
         }
         public static OrderHistory AddFries(OrderHistory order)
         {
-            order.Order = order.Order + "+ fries ";
+            order.Order += "+ fries ";
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
@@ -320,7 +320,7 @@ namespace Library.Models
 
         public static OrderHistory AddCola(OrderHistory order)
         {
-            order.Order = order.Order + "+ cola ";
+            order.Order += "+ cola ";
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
@@ -343,7 +343,7 @@ namespace Library.Models
 
         public static OrderHistory AddLettuce(OrderHistory order)
         {
-            order.Order = order.Order + "+ lettuce ";
+            order.Order += "+ lettuce ";
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
@@ -360,7 +360,7 @@ namespace Library.Models
 
         public static OrderHistory AddOnions(OrderHistory order)
         {
-            order.Order = order.Order + "+ onions ";
+            order.Order += "+ onions ";
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
@@ -377,7 +377,7 @@ namespace Library.Models
 
         public static OrderHistory AddPickles(OrderHistory order)
         {
-            order.Order = order.Order + "+ pickles ";
+            order.Order += "+ pickles ";
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
@@ -394,7 +394,7 @@ namespace Library.Models
 
         public static OrderHistory AddTomatoes(OrderHistory order)
         {
-            order.Order = order.Order + "+ tomatoes ";
+            order.Order += "+ tomatoes ";
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
@@ -411,7 +411,7 @@ namespace Library.Models
 
         public static OrderHistory AddMayo(OrderHistory order)
         {
-            order.Order = order.Order + "+ mayo ";
+            order.Order += "+ mayo ";
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
@@ -428,7 +428,7 @@ namespace Library.Models
 
         public static OrderHistory AddKetchup(OrderHistory order)
         {
-            order.Order = order.Order + "+ ketchup ";
+            order.Order += "+ ketchup ";
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
@@ -445,7 +445,7 @@ namespace Library.Models
 
         public static OrderHistory AddMustard(OrderHistory order)
         {
-            order.Order = order.Order + "+ mustard ";
+            order.Order += "+ mustard ";
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory

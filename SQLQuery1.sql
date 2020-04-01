@@ -38,27 +38,29 @@ CREATE TABLE OrderHistory (
 );
 
 
-CREATE TABLE Inventory (
+CREATE TABLE Inventory2 (
 	Id INT NOT NULL PRIMARY KEY IDENTITY,
 	Product NVARCHAR(50) NOT NULL,
+	Price MONEY NULL,
 	LeominsterQuantity INT NOT NULL,
 	GardnerQuantity INT NOT NULL,
 	WorcesterQuantity INT NOT NULL,
 );
 
-INSERT INTO Inventory (Product, LeominsterQuantity, GardnerQuantity, WorcesterQuantity ) VALUES
-('Hamburgers', 100, 100, 100),
-('Buns', 100, 100, 100),
-('Cheese', 100, 100, 100),
-('Lettuce', 100, 100, 100),
-('Onions', 100, 100, 100),
-('Pickles', 100, 100, 100),
-('Mayonaise', 100, 100, 100),
-('Ketchup', 100, 100, 100),
-('Mustard', 100, 100, 100),
-('EdSauce', 100, 100, 100),
-('Fries', 100, 100, 100),
-('Cola', 100, 100, 100)
+INSERT INTO Inventory2 (Product, Price, LeominsterQuantity, GardnerQuantity, WorcesterQuantity ) VALUES
+('Hamburgers', $3, 100, 100, 100),
+('Buns', $1, 100, 100, 100),
+('Cheese', $.50, 100, 100, 100),
+('Bacon', $1, 100, 100, 100),
+('Lettuce', $0, 100, 100, 100),
+('Onions', $0, 100, 100, 100),
+('Pickles', $0, 100, 100, 100),
+('Mayonaise', $0, 100, 100, 100),
+('Ketchup', $0, 100, 100, 100),
+('Mustard', $0, 100, 100, 100),
+('EdSauce', $.50, 100, 100, 100),
+('Fries', $1, 100, 100, 100),
+('Cola', $1, 100, 100, 100)
 ;
 
 INSERT INTO Customers (FirstName, LastName, Address, PhoneNumber ) VALUES
@@ -66,8 +68,8 @@ INSERT INTO Customers (FirstName, LastName, Address, PhoneNumber ) VALUES
 ('Daniel', 'Mendoza', '58 Kilbourne dr, S. Lancaster, MA, 01561', 5085557390)
 ;
 
-ALTER TABLE Stores ADD 
-PhoneNumber CHAR(10) NULL
+ALTER TABLE OrderHistory ADD 
+TotalPrice MONEY NULL
 ;
 UPDATE customers SET PhoneNumber =  5085555364
 WHERE Id = 4;
@@ -95,13 +97,37 @@ UPDATE stores SET avgreviewscore = (select AVG(score) from reviews where storeid
 where id = 3
 
 select * from customers
-select * from inventory
 select * from reviews
 select * from orderhistory
 select * from stores
+select * from inventory
+select * from Prices
+
+CREATE TABLE Prices (
+	Product NVARCHAR(50) NOT NULL,
+	Prices MONEY NULL
+);
+
+TRUNCATE TABLE OrderHistory;
+
+INSERT INTO Prices (Product, Prices) VALUES
+('Hamburgers', $3),
+('Buns', $1),
+('Cheese', $.50),
+('Bacon', $1),
+('Lettuce', $0),
+('Onions', $0),
+('Pickles', $0),
+('Mayonaise', $0),
+('Ketchup', $0),
+('Mustard', $0),
+('EdSauce', $.50),
+('Fries', $1),
+('Cola', $1)
+;
 
 DELETE FROM CUSTOMERS 
-WHERE ID = 2
+WHERE ID = 8
 
 CREATE TABLE Inventory (
 	StoreId INT NOT NULL PRIMARY KEY IDENTITY FOREIGN KEY REFERENCES Stores(Id),
@@ -127,5 +153,23 @@ onions, pickles, mayonaise, ketchup, mustard, edsauce, fries, cola) VALUES
 ('Prices', 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1),
 ('Leominster', 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100)
 
-UPDATE Inventory SET Hamburgers = 100
-where storeid = 2
+UPDATE orderhistory SET Totalprice = 4
+where OrderId = 2
+
+
+
+
+select * from dbo
+
+select * from customers
+
+select * from reviews
+
+select * from orderhistory
+
+select * from stores
+
+select * from inventory
+
+select * from Prices
+
