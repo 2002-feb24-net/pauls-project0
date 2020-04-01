@@ -34,7 +34,7 @@ namespace ConsoleApp1
 
                 if (input == "l")
                 {
-                    customer = Login();
+                    customer = Login(order);
                     if (customer == null)
                     {
                         continue;
@@ -158,7 +158,7 @@ namespace ConsoleApp1
             Console.WriteLine("Goodbye.");
         }
 
-        public static Customers Login()
+        public static Customers Login(OrderHistory order)
         {
             var cust = new Customers();
             Console.WriteLine();
@@ -182,7 +182,7 @@ namespace ConsoleApp1
                 if (cust == null)
                 {
                     Console.WriteLine("No Customers found. Please try again");
-                    Login();
+                    Login(order);
                 }
                 else
                 {
@@ -194,7 +194,7 @@ namespace ConsoleApp1
             var input = Console.ReadLine();
             if (input == "n")
             {
-                Login();
+                Login(order);
             }
             else if (input == "y")
             {
@@ -204,7 +204,7 @@ namespace ConsoleApp1
             {
                 Console.WriteLine();
                 Console.WriteLine("Invalid entry. Please try again.");
-                Login();
+                Login(order);
             }
             return cust;
         }
