@@ -7,17 +7,15 @@ namespace DataAccess.Entities
     {
         public Stores()
         {
+            Inventory = new HashSet<Inventory>();
             OrderHistory = new HashSet<OrderHistory>();
-            ReviewsNavigation = new HashSet<Reviews>();
         }
 
         public int StoreId { get; set; }
         public string Location { get; set; }
-        public decimal? AvgReviewScore { get; set; }
-        public int? Reviews { get; set; }
         public string PhoneNumber { get; set; }
 
+        public virtual ICollection<Inventory> Inventory { get; set; }
         public virtual ICollection<OrderHistory> OrderHistory { get; set; }
-        public virtual ICollection<Reviews> ReviewsNavigation { get; set; }
     }
 }

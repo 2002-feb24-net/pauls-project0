@@ -8,7 +8,6 @@ namespace DataAccess.Entities
         public Customers()
         {
             OrderHistory = new HashSet<OrderHistory>();
-            Reviews = new HashSet<Reviews>();
         }
 
         public int Id { get; set; }
@@ -18,6 +17,5 @@ namespace DataAccess.Entities
         public string PhoneNumber { get; set; }
 
         public virtual ICollection<OrderHistory> OrderHistory { get; set; }
-        public virtual ICollection<Reviews> Reviews { get; set; }
     }
 }

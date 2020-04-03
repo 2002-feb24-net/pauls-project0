@@ -38,7 +38,6 @@ namespace Library.Models
             Console.WriteLine("4: Add tomatoes");
             Console.WriteLine("5: Add mayo");
             Console.WriteLine("6: Add ketchup");
-            Console.WriteLine("7: Add mustard");
             Console.WriteLine();
             Console.WriteLine("Select an option to add to your order,");
             Console.WriteLine("  or press 'b' to go back.");
@@ -122,11 +121,7 @@ namespace Library.Models
                         {
                             order = AddKetchup(order);
                         }
-                        else if (input == "7")
-                        {
-                            order = AddMustard(order);
-                        }
-
+                       
                     } while (loop2);
                 }
                 else if (input == "0")
@@ -180,16 +175,11 @@ namespace Library.Models
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
-                               where p.Location == order.Location
+                               where p.StoreId == order.StoreId && p.Product == "Buns"
                                select p).SingleOrDefault();
 
-                product.Buns -= 1;
-
-                var price = (from p in db.Prices
-                               where p.Product == "Buns"
-                               select p).SingleOrDefault();
-
-                order.TotalPrice += price.Price;
+                product.Quantity -= 1;
+                order.TotalPrice += product.Price;
                 db.SaveChanges();
             }
             Console.WriteLine("'1 Good Burger with nothing on it' ordered.");
@@ -202,23 +192,18 @@ namespace Library.Models
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
-                               where p.Location == order.Location
-                                 select p).SingleOrDefault();
+                               where p.StoreId == order.StoreId && p.Product == "Buns"
+                               select p).SingleOrDefault();
 
-                product.Hamburgers -= 1;
-                product.Buns -= 1;
+                product.Quantity -= 1;
+                order.TotalPrice += product.Price;
 
-                var price = (from p in db.Prices
-                             where p.Product == "Buns"
-                             select p).SingleOrDefault();
+                product = (from p in db.Inventory
+                               where p.StoreId == order.StoreId && p.Product == "Hamburgers"
+                               select p).SingleOrDefault();
 
-                order.TotalPrice += price.Price;
-
-                price = (from p in db.Prices
-                             where p.Product == "Hamburgers"
-                             select p).SingleOrDefault();
-
-                order.TotalPrice += price.Price;
+                product.Quantity -= 1;
+                order.TotalPrice += product.Price;
 
                 db.SaveChanges();
 
@@ -234,16 +219,11 @@ namespace Library.Models
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
-                               where p.Location == order.Location
+                               where p.StoreId == order.StoreId && p.Product == "Cheese"
                                select p).SingleOrDefault();
 
-                product.Cheese -= 1;
-
-                var price = (from p in db.Prices
-                             where p.Product == "Cheese"
-                             select p).SingleOrDefault();
-
-                order.TotalPrice += price.Price;
+                product.Quantity -= 1;
+                order.TotalPrice += product.Price;
 
                 db.SaveChanges();
             }
@@ -257,16 +237,11 @@ namespace Library.Models
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
-                               where p.Location == order.Location
+                               where p.StoreId == order.StoreId && p.Product == "Bacon"
                                select p).SingleOrDefault();
 
-                product.Bacon -= 1;
-
-                var price = (from p in db.Prices
-                             where p.Product == "Bacon"
-                             select p).SingleOrDefault();
-
-                order.TotalPrice += price.Price;
+                product.Quantity -= 1;
+                order.TotalPrice += product.Price;
 
                 db.SaveChanges();
             }
@@ -280,16 +255,11 @@ namespace Library.Models
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
-                               where p.Location == order.Location
+                               where p.StoreId == order.StoreId && p.Product == "EdSauce"
                                select p).SingleOrDefault();
 
-                product.EdSauce -= 1;
-
-                var price = (from p in db.Prices
-                             where p.Product == "EdSauce"
-                             select p).SingleOrDefault();
-
-                order.TotalPrice += price.Price;
+                product.Quantity -= 1;
+                order.TotalPrice += product.Price;
 
                 db.SaveChanges();
             }
@@ -302,16 +272,12 @@ namespace Library.Models
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
-                               where p.Location == order.Location
+                               where p.StoreId == order.StoreId && p.Product == "Fries"
                                select p).SingleOrDefault();
 
-                product.Fries -= 1;
+                product.Quantity -= 1;
+                order.TotalPrice += product.Price;
 
-                var price = (from p in db.Prices
-                             where p.Product == "Fries"
-                             select p).SingleOrDefault();
-
-                order.TotalPrice += price.Price;
                 db.SaveChanges();
             }
             Console.WriteLine("fries added");
@@ -324,16 +290,11 @@ namespace Library.Models
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
-                               where p.Location == order.Location
+                               where p.StoreId == order.StoreId && p.Product == "Cola"
                                select p).SingleOrDefault();
 
-                product.Cola -= 1;
-
-                var price = (from p in db.Prices
-                             where p.Product == "Cola"
-                             select p).SingleOrDefault();
-
-                order.TotalPrice += price.Price;
+                product.Quantity -= 1;
+                order.TotalPrice += product.Price;
 
                 db.SaveChanges();
             }
@@ -347,10 +308,10 @@ namespace Library.Models
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
-                               where p.Location == order.Location
+                               where p.StoreId == order.StoreId && p.Product == "Lettuce"
                                select p).SingleOrDefault();
 
-                product.Lettuce -= 1;
+                product.Quantity -= 1;
 
                 db.SaveChanges();
             }
@@ -364,10 +325,10 @@ namespace Library.Models
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
-                               where p.Location == order.Location
+                               where p.StoreId == order.StoreId && p.Product == "Onions"
                                select p).SingleOrDefault();
 
-                product.Onions -= 1;
+                product.Quantity -= 1;
 
                 db.SaveChanges();
             }
@@ -381,10 +342,10 @@ namespace Library.Models
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
-                               where p.Location == order.Location
+                               where p.StoreId == order.StoreId && p.Product == "Pickles"
                                select p).SingleOrDefault();
 
-                product.Pickles -= 1;
+                product.Quantity -= 1;
 
                 db.SaveChanges();
             }
@@ -398,10 +359,10 @@ namespace Library.Models
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
-                               where p.Location == order.Location
+                               where p.StoreId == order.StoreId && p.Product == "Tomatoes"
                                select p).SingleOrDefault();
 
-                product.Tomatoes -= 1;
+                product.Quantity -= 1;
 
                 db.SaveChanges();
             }
@@ -415,10 +376,10 @@ namespace Library.Models
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
-                               where p.Location == order.Location
+                               where p.StoreId == order.StoreId && p.Product == "Mayonaise"
                                select p).SingleOrDefault();
 
-                product.Mayonaise -= 1;
+                product.Quantity -= 1;
 
                 db.SaveChanges();
             }
@@ -432,31 +393,14 @@ namespace Library.Models
             using (var db = new BurgerDbContext())
             {
                 var product = (from p in db.Inventory
-                               where p.Location == order.Location
+                               where p.StoreId == order.StoreId && p.Product == "Ketchup"
                                select p).SingleOrDefault();
 
-                product.Ketchup -= 1;
+                product.Quantity -= 1;
 
                 db.SaveChanges();
             }
             Console.WriteLine("ketchup added");
-            return order;
-        }
-
-        public static OrderHistory AddMustard(OrderHistory order)
-        {
-            order.Order += "+ mustard ";
-            using (var db = new BurgerDbContext())
-            {
-                var product = (from p in db.Inventory
-                               where p.Location == order.Location
-                               select p).SingleOrDefault();
-
-                product.Mustard -= 1;
-
-                db.SaveChanges();
-            }
-            Console.WriteLine("mustard added");
             return order;
         }
     }

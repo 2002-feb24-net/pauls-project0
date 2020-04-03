@@ -22,7 +22,7 @@ namespace ConsoleApp1
             bool loop = true;
             while (loop)
             {
-                 
+                 Beginning:
                 Console.WriteLine();
                 Console.WriteLine("l:\tlogin as existing customer");
                 Console.WriteLine("c:\tIf you're a new customer.");
@@ -34,10 +34,10 @@ namespace ConsoleApp1
 
                 if (input == "l")
                 {
-                    customer = Login(order);
-                    if (customer == null)
+                    customer = Login();
+                    if (customer.FirstName == "b")
                     {
-                        continue;
+                        goto Beginning;
                     }
                     order = InitializeOrder(order, customer);
 
@@ -45,7 +45,7 @@ namespace ConsoleApp1
                     Console.WriteLine("b: Go back.");
                     input = Console.ReadLine();
                     if (input == "b")
-                        continue;
+                        goto Beginning;
                     if (input == "d")
                     {
                         input = Order.PlaceOrder(order);
@@ -84,19 +84,12 @@ namespace ConsoleApp1
                             {
                                 Console.Write("Enter Store Location: ");
                                 input = Console.ReadLine();
-                                var ordersQuery =
-                                    from entry in db.OrderHistory
-                                    .AsEnumerable()
-                                    where entry.Location == input
-                                    group entry by entry.StoreId;
+                                var ordersQuery = db.OrderHistory
+                                    .Where(o => o.Location == input);
 
-                                foreach (var entries in ordersQuery)
+                                foreach (var orders in ordersQuery)
                                 {
-                                    Console.WriteLine(entries.Key);
-                                    foreach (OrderHistory orders in entries)
-                                    {
-                                        Console.WriteLine("    {0}: {1}, {2}, {3}", orders.Location, orders.CustomerName, orders.DateTime, orders.Order);
-                                    }
+                                    Console.WriteLine("    {0}: {1}, {2}, {3}",                           orders.Location, orders.CustomerName, orders.DateTime,                orders.Order);
                                 }
                             }
                         }
@@ -107,19 +100,12 @@ namespace ConsoleApp1
                             {
                                 Console.Write("Enter full name of customer: ");
                                 input = Console.ReadLine();
-                                var ordersQuery =
-                                    from entry in db.OrderHistory
-                                    .AsEnumerable()
-                                    where entry.CustomerName == input
-                                    group entry by entry.CustomerName;
+                                var ordersQuery = db.OrderHistory
+                                    .Where(o => o.CustomerName == input);
 
-                                foreach (var entries in ordersQuery)
+                                foreach (var orders in ordersQuery)
                                 {
-                                    Console.WriteLine(entries.Key);
-                                    foreach (OrderHistory orders in entries)
-                                    {
-                                        Console.WriteLine("    {0}: {1}, {2}, {3}", orders.Location, orders.CustomerName, orders.DateTime, orders.Order);
-                                    }
+                                    Console.WriteLine("    {0}: {1}, {2}, {3}",                           orders.Location, orders.CustomerName, orders.DateTime,                orders.Order);
                                 }
                             }
                         }
@@ -135,11 +121,6 @@ namespace ConsoleApp1
                         Console.WriteLine("Invalid password. Please try again.");
                     }
 
-                }
-
-                else if(input == "b")
-                {
-                    continue;
                 }
 
                 else if (input == "q")
@@ -158,7 +139,7 @@ namespace ConsoleApp1
             Console.WriteLine("Goodbye.");
         }
 
-        public static Customers Login(OrderHistory order)
+        public static Customers Login()
         {
             var cust = new Customers();
             Console.WriteLine();
@@ -166,6 +147,7 @@ namespace ConsoleApp1
             var firstName = Console.ReadLine();
             if(firstName == "b")
             {
+                cust.FirstName = firstName;
                 return cust;
             }
             Console.Write("Enter last name: ");
@@ -182,7 +164,7 @@ namespace ConsoleApp1
                 if (cust == null)
                 {
                     Console.WriteLine("No Customers found. Please try again");
-                    Login(order);
+                    Login();
                 }
                 else
                 {
@@ -194,7 +176,7 @@ namespace ConsoleApp1
             var input = Console.ReadLine();
             if (input == "n")
             {
-                Login(order);
+                Login();
             }
             else if (input == "y")
             {
@@ -204,7 +186,7 @@ namespace ConsoleApp1
             {
                 Console.WriteLine();
                 Console.WriteLine("Invalid entry. Please try again.");
-                Login(order);
+                Login();
             }
             return cust;
         }
